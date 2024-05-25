@@ -1,0 +1,18 @@
+This is the format I'm looking for.
+
+td
+
+td> p
+1. C project  [ ]
+2. clean room [ ]
+
+td> set 2 done
+td> p
+1. C project  [ ]
+2. clean room [x]
+
+td> del 2
+td> p
+1. C project [ ]
+
+td> 
