@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <errno.h>
 
@@ -55,8 +56,12 @@ void td_repl(void)
 	char *prompt;
 	FILE *cfg_fp;
 	bool is_edited = false;
-	
+
+#ifdef __APPLE__	
+	snprintf(cfg_path, CFG_PATH_MAX, "/Users/%s/.config/td/td.data", getlogin()); 
+#else
 	snprintf(cfg_path, CFG_PATH_MAX, "/home/%s/.config/td/td.data", getlogin()); 
+#endif
 
 	cfg_fp = fopen(cfg_path, "r");
 	
