@@ -88,3 +88,16 @@ void td_list_delete(td_list_T **head, size_t index)
 
 	free(node_to_delete);	
 } 
+
+void td_list_free(td_list_T *head)
+{
+	td_list_T *node_to_free;
+
+	while(head) {
+		node_to_free = head;
+		head = head->next;
+		free(node_to_free);
+	}
+
+}
+
