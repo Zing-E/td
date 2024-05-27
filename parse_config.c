@@ -15,7 +15,7 @@ static td_T *line_parse(char *line, size_t index)
 {
 	td_T *td;
 
-	char *name = malloc(strlen(line) + 1);
+	char *name = calloc(1, strlen(line) + 1);
 	char *word;
 	bool status;
 	size_t space_count = 0;

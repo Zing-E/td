@@ -60,14 +60,21 @@ void td_list_delete(td_list_T **head, size_t index)
 	td_list_T *node_to_delete;
 
 	if(index == 1) {
-		if((*head)->next)
-			td_list_decrement(*head, 2);
+	
 		node_to_delete = *head;
+		
+		if((*head)->next) {
+			td_list_decrement(*head, 2);
 
-		(*head) = (*head)->next;
-		(*head)->prev = NULL;
-		free(node_to_delete);
-		return;
+			(*head) = (*head)->next;
+			(*head)->prev = NULL;
+			free(node_to_delete);
+			return;
+		} else {
+			free(node_to_delete);
+			(*head) = NULL;
+			return;
+		}
 	}
 
 	node_to_delete = td_list_index(*head, index);
@@ -80,4 +87,4 @@ void td_list_delete(td_list_T **head, size_t index)
 	}
 
 	free(node_to_delete);	
-}
+} 
