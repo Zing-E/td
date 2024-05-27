@@ -19,6 +19,7 @@
 
 static void print_td(td_list_T *);
 static void delete_index(td_list_T **, char *);
+static void change_index(td_list_T **, char *);
 static void change_config(FILE *, td_list_T *);
 
 static void print_td(td_list_T *head)
@@ -36,15 +37,28 @@ static void change_config(FILE *fp, td_list_T *)
 {
 }
 
+static void change_index(td_list_T **head, char *line)
+{
+	td_list_T *td_to_change;
+	
+	if(isspace(*++line) && isdigit(*++line) && (td_to_change = td_list_index(*head, *line-'0')) && \
+			       	isspace(*++line) && *++line)
+		if(*line == '1')
+			td_to_change->td->status = true;
+		else if(*line == '0')
+			td_to_change->td->status = false;
+		else
+			fprintf(stderr, "td: Incorrect Syntax.\n");
+	else
+		fprintf(stderr, "td: Incorrect Syntax.\n");
+}
+
 static void delete_index(td_list_T **head, char *line)
 {
-	if(*++line) 
-		if(isspace(*line) && *++line) 
-			if(isdigit(*line) && td_list_index(*head, *line-'0')) {
-				td_list_delete(head, *line-'0');
-				return;
-			} else 
-				fprintf(stderr, "td: Incorrect Syntax.\n");
+	if(isspace(*++line) && isdigit(*++line) && td_list_index(*head, *line-'0'))
+		td_list_delete(head, *line-'0');
+	else 
+		fprintf(stderr, "td: Incorrect Syntax.\n");
 }
 
 
@@ -85,6 +99,8 @@ void td_repl(void)
 			print_td(td_list_head);
 		else if(prompt[0] == 'd') 
 			delete_index(&td_list_head, prompt);
+		else if(prompt[0] == 'c')
+			change_index(&td_list_head, prompt);
 		else if(!strcmp(prompt, "q"))
 			exit(EXIT_SUCCESS);
 
