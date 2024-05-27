@@ -107,4 +107,6 @@ void td_repl(void)
 	}
 
 	free(prompt);
+
+	td_list_free(td_list_head);
 }
