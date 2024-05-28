@@ -3,6 +3,10 @@
 This is a cli todo manager I wrote in C to learn about storing changes in memory
 before writing it to a file.
 
+# Important
+
+Please create a ~/.config/td/td.data file; this is where td stores your todo list.
+
 # Usage
 
 - To print current todo list run:
