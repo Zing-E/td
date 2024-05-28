@@ -59,8 +59,10 @@ static void repl_add_td(td_list_T **head, char *line)
 
 	if(isspace(*++line) && *++line)
 		to_format = line;
-	else
+	else {
+		fprintf(stderr, "Incorrect Syntax.\n");
 		return;
+	}
 
 	td_list_insert(head, line_parse(to_format, td_list_last_index(*head) + 1));
 }
