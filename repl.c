@@ -18,9 +18,10 @@
 #define CFG_PATH_MAX 128
 
 static void print_td(td_list_T *);
-static void delete_index(td_list_T **, char *);
-static void change_index(td_list_T **, char *);
-static void change_config(FILE *, td_list_T *);
+static void repl_delete_index(td_list_T **, char *);
+static void repl_change_index(td_list_T *, char *);
+static void repl_change_config(td_list_T *, char *, FILE *);
+static void repl_add_td(td_list_T **, char *);
 
 static void print_td(td_list_T *head)
 {
@@ -33,15 +34,28 @@ static void print_td(td_list_T *head)
 		printf(" %ld. [%c] %s\n", i->td->index, (i->td->status == true) ? 'x' : ' ', i->td->name);
 }
 
-static void change_config(FILE *fp, td_list_T *)
+static void repl_change_config(td_list_T *head, char *cfg_path, FILE *cfg_fp)
 {
+	/* This removes whats already in the td.data file */
+
+	fclose(cfg_fp);
+
+	cfg_fp = fopen(cfg_path, "w");
+
+	if(!cfg_fp) {
+		fprintf(stderr, "td: %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+
+	for(td_list_T *i = head; i; i = i->next)
+		fprintf(cfg_fp, "%s %d\n", i->td->name, i->td->status);
 }
 
-static void change_index(td_list_T **head, char *line)
+static void repl_change_index(td_list_T *head, char *line)
 {
 	td_list_T *td_to_change;
 	
-	if(isspace(*++line) && isdigit(*++line) && (td_to_change = td_list_index(*head, *line-'0')) && \
+	if(isspace(*++line) && isdigit(*++line) && (td_to_change = td_list_index(head, *line-'0')) && \
 			       	isspace(*++line) && *++line)
 		if(*line == '1')
 			td_to_change->td->status = true;
@@ -53,12 +67,22 @@ static void change_index(td_list_T **head, char *line)
 		fprintf(stderr, "td: Incorrect Syntax.\n");
 }
 
-static void delete_index(td_list_T **head, char *line)
+static void repl_delete_index(td_list_T **head, char *line)
 {
 	if(isspace(*++line) && isdigit(*++line) && td_list_index(*head, *line-'0'))
 		td_list_delete(head, *line-'0');
 	else 
 		fprintf(stderr, "td: Incorrect Syntax.\n");
+}
+
+static void repl_add_td(td_list_T **head, char *line)
+{
+	char *to_format;
+
+	if(isspace(*++line) && *++line)
+		to_format = line;
+
+	td_list_insert(head, line_parse(to_format, 3));
 }
 
 
@@ -69,7 +93,6 @@ void td_repl(void)
 	char cfg_path[CFG_PATH_MAX + 1];
 	char *prompt;
 	FILE *cfg_fp;
-	bool is_edited = false;
 
 #ifdef __APPLE__	
 	snprintf(cfg_path, CFG_PATH_MAX, "/Users/%s/.config/td/td.data", getlogin()); 
@@ -98,9 +121,13 @@ void td_repl(void)
 		if(!strcmp(prompt, "p"))
 			print_td(td_list_head);
 		else if(prompt[0] == 'd') 
-			delete_index(&td_list_head, prompt);
+			repl_delete_index(&td_list_head, prompt);
 		else if(prompt[0] == 'c')
-			change_index(&td_list_head, prompt);
+			repl_change_index(td_list_head, prompt);
+		else if(!strcmp(prompt, "w"))
+			repl_change_config(td_list_head, cfg_path, cfg_fp);
+		else if(prompt[0] == 'a')
+			repl_add_td(&td_list_head, prompt);
 		else if(!strcmp(prompt, "q"))
 			exit(EXIT_SUCCESS);
 
