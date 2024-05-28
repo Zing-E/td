@@ -8,7 +8,7 @@
 #include "parse_config.h"
 #include "repl.h"
 
-int main(int argc, char *argv[])
+int main(void)
 {
 	td_repl();
 
