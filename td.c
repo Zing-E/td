@@ -55,6 +55,16 @@ static void td_list_decrement(td_list_T *head, size_t index)
 		i->td->index--;
 }
 
+size_t td_list_last_index(td_list_T *head)
+{
+	size_t index = 0;
+
+	for(td_list_T *i = head; i; i = i->next)
+		index++;
+
+	return index;
+} 
+
 void td_list_delete(td_list_T **head, size_t index)
 {
 	td_list_T *node_to_delete;
@@ -98,6 +108,4 @@ void td_list_free(td_list_T *head)
 		head = head->next;
 		free(node_to_free);
 	}
-
 }
-
