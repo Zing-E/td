@@ -23,6 +23,12 @@ Please create a ~/.config/td/td.data file; this is where td stores your todo lis
   ```
   c [index] [0-1]
   ```
+
+- To save your changes run:
+  ```
+  w
+  ```
+
 - To delete a todo run:
   ```
   d [index]
