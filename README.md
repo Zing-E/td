@@ -9,11 +9,6 @@ Please create a ~/.config/td/td.data file; this is where td stores your todo lis
 
 # Usage
 
-- To print current todo list run:
-  ```
-  p
-  ```
-
 - To add a todo run:
   ```
   a [name] [0-1]
@@ -24,12 +19,21 @@ Please create a ~/.config/td/td.data file; this is where td stores your todo lis
   c [index] [0-1]
   ```
 
+- To delete a todo run:
+  ```
+  d [index]
+  ```
+
+- To print current todo list run:
+  ```
+  p
+  ```
 - To save your changes run:
   ```
   w
   ```
 
-- To delete a todo run:
+- To quit run:
   ```
-  d [index]
+  q
   ```

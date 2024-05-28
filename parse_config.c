@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "td.h"
 #include "parse_config.h"
+#include "td.h"
 
 td_T *line_parse(char *line, size_t index)
 {

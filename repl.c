@@ -1,27 +1,28 @@
 /* repl.c */
 
 #include <ctype.h>
+#include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <errno.h>
 
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#include "td.h"
 #include "parse_config.h"
 #include "repl.h"
+#include "td.h"
 
 #define CFG_PATH_MAX 128
 
 static void print_td(td_list_T *);
 static void repl_delete_index(td_list_T **, char *);
-static void repl_change_index(td_list_T *, char *);
-static void repl_change_config(td_list_T *, char *, FILE *);
+static void repl_help(void);
 static void repl_add_td(td_list_T **, char *);
+static void repl_change_config(td_list_T *, char *, FILE *);
+static void repl_change_index(td_list_T *, char *);
 
 static void print_td(td_list_T *head)
 {
@@ -32,6 +33,36 @@ static void print_td(td_list_T *head)
 
 	for(td_list_T *i = head; i; i = i->next)
 		printf(" %ld. [%c] %s\n", i->td->index, (i->td->status == true) ? 'x' : ' ', i->td->name);
+}
+
+static void repl_delete_index(td_list_T **head, char *line)
+{
+	if(isspace(*++line) && isdigit(*++line) && td_list_index(*head, *line-'0'))
+		td_list_delete(head, *line-'0');
+	else 
+		fprintf(stderr, "td: Incorrect Syntax.\n");
+}
+
+static void repl_help(void)
+{
+	printf("a [name]  [0-1] - Add todo\n" 
+		"c [index] [0-1] - Change todo\n" 
+		"d [index]	- Delete todo\n"
+		"p 		- Prints todo list\n"
+		"w		- Writes todo list\n"
+		"q		- Exits Todo\n");
+}
+
+static void repl_add_td(td_list_T **head, char *line)
+{
+	char *to_format;
+
+	if(isspace(*++line) && *++line)
+		to_format = line;
+	else
+		return;
+
+	td_list_insert(head, line_parse(to_format, td_list_last_index(*head) + 1));
 }
 
 static void repl_change_config(td_list_T *head, char *cfg_path, FILE *cfg_fp)
@@ -67,27 +98,6 @@ static void repl_change_index(td_list_T *head, char *line)
 		fprintf(stderr, "td: Incorrect Syntax.\n");
 }
 
-static void repl_delete_index(td_list_T **head, char *line)
-{
-	if(isspace(*++line) && isdigit(*++line) && td_list_index(*head, *line-'0'))
-		td_list_delete(head, *line-'0');
-	else 
-		fprintf(stderr, "td: Incorrect Syntax.\n");
-}
-
-static void repl_add_td(td_list_T **head, char *line)
-{
-	char *to_format;
-
-	if(isspace(*++line) && *++line)
-		to_format = line;
-	else
-		return;
-
-	td_list_insert(head, line_parse(to_format, td_list_last_index(*head) + 1));
-}
-
-
 void td_repl(void)
 {
 	/* That should be fine right? :-) */
@@ -120,19 +130,20 @@ void td_repl(void)
 
 		add_history(prompt);
 
-		if(!strcmp(prompt, "p"))
-			print_td(td_list_head);
-		else if(prompt[0] == 'd') 
-			repl_delete_index(&td_list_head, prompt);
+		if(prompt[0] == 'a')
+			repl_add_td(&td_list_head, prompt);
 		else if(prompt[0] == 'c')
 			repl_change_index(td_list_head, prompt);
+		else if(prompt[0] == 'd')
+			repl_delete_index(&td_list_head, prompt);
+		else if(!strcmp(prompt, "h"))
+			repl_help();
+		else if(!strcmp(prompt, "p"))
+			print_td(td_list_head);
 		else if(!strcmp(prompt, "w"))
 			repl_change_config(td_list_head, cfg_path, cfg_fp);
-		else if(prompt[0] == 'a')
-			repl_add_td(&td_list_head, prompt);
-		else if(!strcmp(prompt, "q"))
+		else if(prompt[0] == 'q' && prompt[1] == '\0')
 			exit(EXIT_SUCCESS);
-
 	}
 
 	free(prompt);

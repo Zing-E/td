@@ -18,52 +18,11 @@ td_T *new_td(char *name, size_t index, bool status)
 	return td;
 }
 
-void td_list_insert(td_list_T **head, td_T *td)
-{
-	if(!(*head)) {
-		(*head) = malloc(sizeof(td_list_T));
-		(*head)->td = td;
-		(*head)->next = NULL;
-		(*head)->prev = NULL;
-		return;
-	}
-
-	td_list_T *new_node = malloc(sizeof(td_list_T));
-
-	td_list_T *i;
-	
-	for(i = *head; i->next != NULL; i = i->next);
-
-	new_node->td = td;
-	new_node->next = NULL;
-	new_node->prev = i;
-		
-	i->next = new_node;
-}
-
-td_list_T *td_list_index(td_list_T *head, size_t index)
-{
-	for(td_list_T *i = head; i != NULL; i = i->next)
-		if(i->td->index == index)
-			return i;
-	return NULL;
-}
-
 static void td_list_decrement(td_list_T *head, size_t index)
 {
 	for(td_list_T *i = td_list_index(head, index); i != NULL; i = i->next)
 		i->td->index--;
 }
-
-size_t td_list_last_index(td_list_T *head)
-{
-	size_t index = 0;
-
-	for(td_list_T *i = head; i; i = i->next)
-		index++;
-
-	return index;
-} 
 
 void td_list_delete(td_list_T **head, size_t index)
 {
@@ -109,3 +68,45 @@ void td_list_free(td_list_T *head)
 		free(node_to_free);
 	}
 }
+
+td_list_T *td_list_index(td_list_T *head, size_t index)
+{
+	for(td_list_T *i = head; i != NULL; i = i->next)
+		if(i->td->index == index)
+			return i;
+	return NULL;
+}
+
+
+void td_list_insert(td_list_T **head, td_T *td)
+{
+	if(!(*head)) {
+		(*head) = malloc(sizeof(td_list_T));
+		(*head)->td = td;
+		(*head)->next = NULL;
+		(*head)->prev = NULL;
+		return;
+	}
+
+	td_list_T *new_node = malloc(sizeof(td_list_T));
+
+	td_list_T *i;
+	
+	for(i = *head; i->next != NULL; i = i->next);
+
+	new_node->td = td;
+	new_node->next = NULL;
+	new_node->prev = i;
+		
+	i->next = new_node;
+}
+
+size_t td_list_last_index(td_list_T *head)
+{
+	size_t index = 0;
+
+	for(td_list_T *i = head; i; i = i->next)
+		index++;
+
+	return index;
+} 
