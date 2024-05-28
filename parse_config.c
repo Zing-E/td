@@ -9,15 +9,13 @@
 #include "td.h"
 #include "parse_config.h"
 
-static td_T *line_parse(char *line, size_t index);
-
-static td_T *line_parse(char *line, size_t index)
+td_T *line_parse(char *line, size_t index)
 {
 	td_T *td;
 
 	char *name = calloc(1, strlen(line) + 1);
 	char *word;
-	bool status;
+	int status = -1;
 	size_t space_count = 0;
 
 	while((word = strsep(&line, " "))) {
@@ -39,6 +37,11 @@ static td_T *line_parse(char *line, size_t index)
 		
 		space_count++;
 	}
+
+	/* If no status is given default to false */
+
+	if(status == -1)
+		status = false;
 
 	td = new_td(name, index, status);
 
