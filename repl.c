@@ -143,7 +143,7 @@ void td_repl(void)
 			print_td(td_list_head);
 		else if(!strcmp(prompt, "w"))
 			repl_change_config(td_list_head, cfg_path, cfg_fp);
-		else if(prompt[0] == 'q' && prompt[1] == '\0') {
+		else if(!strcmp(prompt, "q")) {
 			free(prompt);
 			td_list_free(td_list_head);
 			
