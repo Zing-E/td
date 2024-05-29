@@ -7,6 +7,12 @@
 
 static void td_list_decrement(td_list_T *, size_t);
 
+static void td_list_decrement(td_list_T *head, size_t index)
+{
+	for(td_list_T *i = td_list_index(head, index); i != NULL; i = i->next)
+		i->td->index--;
+}
+
 td_T *new_td(char *name, size_t index, bool status)
 {
 	td_T *td = malloc(sizeof(td_T));
@@ -21,12 +27,6 @@ td_T *new_td(char *name, size_t index, bool status)
 	td->status = status;
 
 	return td;
-}
-
-static void td_list_decrement(td_list_T *head, size_t index)
-{
-	for(td_list_T *i = td_list_index(head, index); i != NULL; i = i->next)
-		i->td->index--;
 }
 
 void td_list_delete(td_list_T **head, size_t index)
