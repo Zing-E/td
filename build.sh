@@ -2,14 +2,10 @@
 
 # Yes its shell not make (I don't know how to use make)
 
-CC=cc
+CC=gcc-14
 CFLAGS="-Wall -Wextra -lreadline -std=gnu99 -g"
 OBJ="obj/*.o"
 BIN="td"
-
-usage() {
-	echo "Usage: $0 [build clean]" 
-}
 
 build() {
 	$CC $CFLAGS -c main.c -o obj/main.o
@@ -23,6 +19,10 @@ build() {
 clean() {
 	rm $OBJ
 	rm $BIN
+}
+
+usage() {
+	echo "Usage: $0 [build clean]" 
 }
 
 case "$1" in
