@@ -14,6 +14,12 @@ td_T *line_parse(char *line, size_t index)
 	td_T *td;
 
 	char *name = calloc(1, strlen(line) + 1);
+	
+	if(!name) {
+		fprintf(stderr, "td: Failure getting memory.\n");
+		exit(EXIT_FAILURE);
+	}
+	
 	char *word;
 	int status = -1;
 	size_t space_count = 0;
@@ -53,6 +59,11 @@ td_list_T *file_parse(FILE *fp)
 	size_t buf_size = 20;
 	char *buf = malloc(buf_size);
 	
+	if(!buf) {
+		fprintf(stderr, "td: Failure getting memory.\n");
+		exit(EXIT_FAILURE);
+	}
+
 	td_list_T *td_list = NULL;
 	
 	size_t index = 1;

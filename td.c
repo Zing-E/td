@@ -11,6 +11,11 @@ td_T *new_td(char *name, size_t index, bool status)
 {
 	td_T *td = malloc(sizeof(td_T));
 
+	if(!td) {
+		fprintf(stderr, "td: Failure getting memory.\n");
+		exit(EXIT_FAILURE);
+	}
+
 	td->name = name;
 	td->index = index;
 	td->status = status;
@@ -82,13 +87,25 @@ void td_list_insert(td_list_T **head, td_T *td)
 {
 	if(!(*head)) {
 		(*head) = malloc(sizeof(td_list_T));
+	
+		if(!(*head)) {
+			fprintf(stderr, "td: Failure getting memory.\n");
+			exit(EXIT_FAILURE);
+		}
+
 		(*head)->td = td;
 		(*head)->next = NULL;
 		(*head)->prev = NULL;
+	
 		return;
 	}
 
 	td_list_T *new_node = malloc(sizeof(td_list_T));
+
+	if(!new_node) {
+		fprintf(stderr, "td: Failure getting memory.\n");
+		exit(EXIT_FAILURE);
+	}
 
 	td_list_T *i;
 	

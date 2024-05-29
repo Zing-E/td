@@ -1,10 +1,16 @@
 /* main.c */
 
+#include <stdio.h>
+#include <string.h>
+
 #include "repl.h"
 
-int main(void)
+int main(int argc, char *argv[])
 {
-	td_repl();
+	if(*++argv && !strcmp(*argv, "-h")) 
+		td_help();
+	else
+		td_repl();
 
 	return 0;
 }
