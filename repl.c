@@ -19,7 +19,6 @@
 
 static void print_td(td_list_T *);
 static void repl_delete_index(td_list_T **, char *);
-static void repl_help(void);
 static void repl_add_td(td_list_T **, char *);
 static void repl_change_config(td_list_T *, char *, FILE *);
 static void repl_change_index(td_list_T *, char *);
@@ -43,7 +42,7 @@ static void repl_delete_index(td_list_T **head, char *line)
 		fprintf(stderr, "td: Incorrect Syntax.\n");
 }
 
-static void repl_help(void)
+void td_help(void)
 {
 	printf("a [name]  [0-1] - Add todo\n" 
 		"c [index] [0-1] - Change todo\n" 
@@ -139,7 +138,7 @@ void td_repl(void)
 		else if(prompt[0] == 'd')
 			repl_delete_index(&td_list_head, prompt);
 		else if(!strcmp(prompt, "h"))
-			repl_help();
+			td_help();
 		else if(!strcmp(prompt, "p"))
 			print_td(td_list_head);
 		else if(!strcmp(prompt, "w"))
