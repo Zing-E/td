@@ -2,8 +2,8 @@
 
 # Yes its shell not make (I don't know how to use make)
 
-CC=gcc-14
-CFLAGS="-Wall -Wextra -lreadline -std=gnu99 -g"
+CC=cc
+CFLAGS="-Wall -Wextra -lreadline -O2"
 OBJ="obj/*.o"
 BIN="td"
 
