@@ -57,7 +57,8 @@ void td_list_delete(td_list_T **head, size_t index)
 		node_to_delete->prev->next = NULL;
 	else {
 		node_to_delete->prev->next = node_to_delete->next; 
-		td_list_decrement(*head, index+1);
+		node_to_delete->next->prev = node_to_delete->prev;
+	 	td_list_decrement(*head, index+1);
 	}
 
 	free(node_to_delete);	
