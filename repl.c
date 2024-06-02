@@ -81,6 +81,8 @@ static void repl_change_config(td_list_T *head, char *cfg_path, FILE *cfg_fp)
 
 	for(td_list_T *i = head; i; i = i->next)
 		fprintf(cfg_fp, "%s %d\n", i->td->name, i->td->status);
+
+	fflush(cfg_fp);
 }
 
 static void repl_change_index(td_list_T *head, char *line)
@@ -146,7 +148,7 @@ void td_repl(void)
 		else if(!strcmp(prompt, "q")) {
 			free(prompt);
 			td_list_free(td_list_head);
-			
+			fclose(cfg_fp);
 			exit(EXIT_SUCCESS);
 		}
 	}
