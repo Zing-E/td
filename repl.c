@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -109,11 +108,7 @@ void td_repl(void)
 	char *prompt;
 	FILE *cfg_fp;
 
-#ifdef __APPLE__	
-	snprintf(cfg_path, CFG_PATH_MAX, "/Users/%s/.config/td/td.data", getlogin()); 
-#else
-	snprintf(cfg_path, CFG_PATH_MAX, "/home/%s/.config/td/td.data", getlogin()); 
-#endif
+	snprintf(cfg_path, CFG_PATH_MAX, "%s/.config/td/td.data", getenv("HOME")); 
 
 	cfg_fp = fopen(cfg_path, "r");
 	
