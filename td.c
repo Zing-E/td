@@ -43,12 +43,12 @@ void td_list_delete(td_list_T **head, size_t index)
 			(*head) = (*head)->next;
 			(*head)->prev = NULL;
 			free(node_to_delete);
-			return;
 		} else {
 			free(node_to_delete);
 			(*head) = NULL;
-			return;
 		}
+
+		return;
 	}
 
 	node_to_delete = td_list_index(*head, index);
