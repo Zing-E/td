@@ -109,7 +109,11 @@ void td_list_insert(td_list_T **head, td_T *td)
 	}
 
 	td_list_T *i;
-	
+
+	/* TODO
+	 * Use a tail pointer here to not have to
+	 * traverse till the end of the td_list */
+
 	for(i = *head; i->next != NULL; i = i->next);
 
 	new_node->td = td;
