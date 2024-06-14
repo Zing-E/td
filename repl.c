@@ -58,7 +58,7 @@ static void repl_add_td(td_list_T **head, char *line)
 	if(isspace(*++line) && *++line)
 		to_format = line;
 	else {
-		fprintf(stderr, "Incorrect Syntax.\n");
+		fprintf(stderr, "td: Incorrect Syntax.\n");
 		return;
 	}
 
@@ -145,6 +145,7 @@ void td_repl(void)
 			td_list_free(td_list_head);
 			fclose(cfg_fp);
 			exit(EXIT_SUCCESS);
-		}
+		} else
+			fprintf(stderr, "td: Incorrect Syntax.\n");
 	}
 }
